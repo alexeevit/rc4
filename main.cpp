@@ -7,6 +7,7 @@ using namespace std;
 
 unsigned char state[256];
 int len;
+int x=0, y=0;
 
 void stateSwap(int i, int j) {
   unsigned char temp;
@@ -16,16 +17,16 @@ void stateSwap(int i, int j) {
   state[j] = temp;
 }
 
-void init(unsigned char key[]) {
+void init(unsigned char key[], int keysize) {
 
   for(int i=0; i<256; i++)
     state[i] = i;
 
   int j=0;
   unsigned char temp;
-
+  
   for(int i=0; i<256; i++) {
-    j = (j + state[i] + key[i % sizeof(*key)]) % 256;
+    j = (j + state[i] + key[i % keysize]) % 256;
 
     stateSwap(i, j);
   }
@@ -33,15 +34,10 @@ void init(unsigned char key[]) {
 }
 
 unsigned char prga() {
-  int x=0, y=0;
-
   x = (x + 1) % 256;
   y = (y + state[x]) % 256;
 
   stateSwap(x, y);
-
-  //printf("%02X ", state[(state[x] + state[y]) % 256]); 
-  //printf("\n");
 
   return state[(state[x] + state[y]) % 256];
 }
@@ -57,10 +53,12 @@ unsigned char* encode(unsigned char data[]) {
 }
 
 int main() {
-  unsigned char key[4] = {"tes"};
+  unsigned char key[] = {"test"};
+  int keysize = sizeof(key) - 1;
+  
 
   cout << "KEY: ";
-  for (int idx=0; idx < sizeof(key); idx++) 
+  for (int idx=0; idx < keysize; idx++) 
     printf("%02X ", key[idx]); 
   cout << endl;
 
@@ -69,7 +67,7 @@ int main() {
   len = sizeof(source);
   
   //Initialize generator
-  init(key);
+  init(key, keysize);
 
   //Create data
   unsigned char *data = (unsigned char*) source;
@@ -90,7 +88,7 @@ int main() {
   cout << endl;
  
   //Initialize generator
-  init(key);
+  init(key, keysize);
 
   unsigned char *resource = new unsigned char[len];
 
