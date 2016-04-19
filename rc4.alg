@@ -19,7 +19,8 @@ void init() {
 }
 
 bit tact() {
-  int x = 0, y = 0;
+  int x = 0;
+  int y = 0;
 
   x = (x + 1) % 256;
   y = (y + state[x]) % 256;
@@ -28,7 +29,7 @@ bit tact() {
   state[i] = state[j];
   state[j] = temp;
 
-  return state[(state[x] + state[y]) % 256)
+  return state[(state[x] + state[y]) % 256];
 }
 
 void main() {
