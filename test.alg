@@ -21,10 +21,9 @@ void init() {
 		state[i] = state[j];
 		state[j] = temp;
 	}
-
 }
 
-void tact() {
+void tact(int l) {
 	x = (x + 1) % 256;
 	//костыль
 	int t = y + state[x];
@@ -36,12 +35,12 @@ void tact() {
 	state[y] = temp;
 
 	int t1 = state[x] + state[y];
-	output[i] = state[t1 % 256]; 
+	output[l] = state[t1 % 256]; 
 }
 
 void main() {
 	init();
 	for(int i=0; i<4; i = i + 1){
-		tact();
+		tact(i);
 	}
 }
