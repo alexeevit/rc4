@@ -2,6 +2,9 @@ __in bit key[32];
 
 __out bit state[256];
 
+int x = 0;
+int y = 0;
+
 void init() {
   bit temp;
 
@@ -10,7 +13,8 @@ void init() {
 
   int j = 0;
   for(int i = 0; i < 256; i++) {
-    j = ( j + key[ i % 32 ] + state[i] ) % 256;
+    int index = key[ i % 32 ] + state[i];
+    j = ( j + index ) % 256;
 
     temp = state[i];
     state[i] = state[j];
@@ -19,22 +23,19 @@ void init() {
 }
 
 bit tact() {
-  int x = 0;
-  int y = 0;
-
   x = (x + 1) % 256;
-  y = (y + state[x]) % 256;
+  int index = state[x];
+  y = (y + index) % 256;
 
   temp = state[i];
   state[i] = state[j];
   state[j] = temp;
 
-  return state[(state[x] + state[y]) % 256];
+  index = (state[x] + state[y]);
+  return state[(index % 256)];
 }
 
 void main() {
-  init();
-	for(int i = 0; i < 21; i++) {
-    tact();
-	}
+	init();
+	tact();
 }
